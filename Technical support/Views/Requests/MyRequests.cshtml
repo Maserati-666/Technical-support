@@ -1,0 +1,163 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@model IEnumerable<Technical_support.ViewModel.MyRequests>
+
+@{
+    ViewData["Title"] = "Мои заявки";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Мои заявки</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="breadcrumb-item">
+                    <a asp-controller="Admin"
+                       asp-action="Index">Главная</a>
+                </li>
+            }
+            else
+            {
+                if (User.IsInRole("Manager"))
+                {
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Manager"
+                           asp-action="Index">Главная</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Client"
+                           asp-action="Index">Главная</a>
+                    </li>
+                }
+            }
+            <li class="breadcrumb-item">Заявки</li>
+            <li class="breadcrumb-item active">Мои заявки</li>
+        </ol>
+    </nav>
+</div>
+<table id="example" class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Theme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prioritet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TextRequest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOpen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ManagerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateClose)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusRequest)
+            </th>
+            <th>
+                Действие
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestId)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Theme)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prioritet)
+                </td>
+            <td class="maxwidth">
+                    @Html.DisplayFor(modelItem => item.TextRequest)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.DateOpen)
+            </td>
+            <td>
+                    @if (item.ManagerName != "")
+                    {
+                        @Html.DisplayFor(modelItem => item.ManagerName)
+                    }
+                    else
+                    {
+                        <a>-</a>
+                    }
+            </td>
+            <td>
+                    @if (item.DateClose != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.DateClose)
+                    }
+                    else
+                    {
+                        <a>-</a>
+                    }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusRequest)
+            </td>
+            <td class="maxwidth2">
+                    @if (item.StatusRequest == "Открыта")
+                    {
+                        <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-user="@UserManager.GetUserId(User)"
+                        asp-route-id="@item.RequestId">Изменить</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary disabled btn-sm" tabindex="-1" role="button" aria-disabled="true">Изменить</a>
+                    }
+                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.RequestId">Подробнее</a>
+            </td>
+        </tr>
+}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Theme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prioritet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TextRequest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOpen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ManagerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateClose)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusRequest)
+            </th>
+            <th>
+                Действие
+            </th>
+        </tr>
+    </tfoot>
+</table>

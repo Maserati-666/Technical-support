@@ -1,0 +1,55 @@
+﻿@model Technical_support.ViewModel.UpdateUser
+@{
+    ViewData["Title"] = "Удаление пользователя";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Удаление пользователя</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Admin" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Пользователи</li>
+            <li class="breadcrumb-item active">Удалить пользователя</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="header-h1">
+    <h3>Удалить пользователя @Model.UserName?</h3>
+</div>
+<div class="cards">
+    <div class="row">
+        <div class="col-md-10">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <form asp-action="DeleteUserConfirmed" method="post">
+                <div class="form-group" id="mypadding">
+                    <label asp-for="Id"> Id пользователя</label>
+                    <input asp-for="Id" class="form-control" value="@Model.Id" readonly />
+                </div>
+                <div class="form-group" id="mypadding">
+                    <label asp-for="UserName">Имя пользователя</label>
+                    <input asp-for="UserName" class="form-control" value="@Model.UserName" readonly />
+                </div>
+                <div class="form-group" id="mypadding">
+                    <label asp-for="Email">E-mail</label>
+                    <input asp-for="Email" class="form-control" value="@Model.Email" readonly />
+                </div>
+                <div class="form-group" id="mypadding">
+                    <label asp-for="Phone">Телефон</label>
+                    <input asp-for="Phone" class="form-control" readonly />
+                </div>
+                <div id="mypadding">
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                    <a asp-action="Accounts" class="btn btn-secondary">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+

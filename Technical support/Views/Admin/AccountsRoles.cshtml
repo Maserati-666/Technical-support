@@ -1,0 +1,75 @@
+﻿@using Technical_support.ViewModel;
+@model IEnumerable<AccountsRoles>
+@{
+    ViewData["Title"] = "Аккаунты и роли";
+}
+
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Роли пользователей</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Admin" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Роли</li>
+            <li class="breadcrumb-item active">Роли пользователей</li>
+        </ol>
+    </nav>
+</div>
+
+<div id="tablewidth">
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Id</th>
+                <th>Имя</th>
+                <th>E-mail</th>
+                <th>Телефон</th>
+                <th>Роль</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (Model == null)
+        {
+            <tr>
+                <td colspan="3" class="text-center">Нет ни одной учетной записи</td>
+            </tr>
+        }
+        else
+        {
+            int count = 1;
+            @foreach (var user in Model)
+            {
+            <tr>
+                <td>@count</td>
+                <td>@user.Id</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.Phone</td>
+                <td>@user.Role</td>
+                <td>
+                    <a asp-action="UpdateRole" class="btn btn-sm btn-danger" asp-route-id="@user.Id">Выбрать</a>
+                </td>
+            </tr>
+            count++;
+            }
+        }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>№</th>
+                <th>Id</th>
+                <th>Имя</th>
+                <th>E-mail</th>
+                <th>Телефон</th>
+                <th>Роль</th>
+                <th>Действие</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>

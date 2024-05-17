@@ -1,0 +1,103 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@model IEnumerable<Technical_support.ViewModel.RequestCloseInfo>
+@{
+    ViewData["Title"] = "Исполнение заявок";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Исполнение заявок</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Manager" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Заявки</li>
+            <li class="breadcrumb-item active">Исполнение заявок</li>
+        </ol>
+    </nav>
+</div>
+
+<h3>Хотите исполнить заявку?</h3>
+
+<div class="cards">
+    <dl class="row" id="mypadding">
+                @foreach (var item in Model)
+                {
+                    @foreach (var item1 in item.RequestAccept)
+                    {
+                        <dt class="col-sm-5" id="mypadding">
+                            @Html.DisplayNameFor(model => model.ListRequest.RequestId)
+                        </dt>
+                        <dd class="col-sm-7">
+                            <a>@item1.RequestId</a>
+                        </dd>
+                        <dt class="col-sm-5" id="mypadding">
+                            @Html.DisplayNameFor(model => model.ListRequest.UserName)
+                        </dt>
+                        <dd class="col-sm-7" id="mypadding">
+                            <a>@item1.UserName</a>
+                        </dd>
+                        <dt class="col-sm-5" id="mypadding">
+                            @Html.DisplayNameFor(model => model.ListRequest.NameTheme)
+                        </dt>
+                        <dd class="col-sm-7" id="mypadding">
+                            <a>@item1.NameTheme</a>
+                        </dd>
+                        <dt class="col-sm-5" id="mypadding">
+                            @Html.DisplayNameFor(model => model.ListRequest.TextRequest)
+                        </dt>
+                        <dd class="col-sm-7" id="mypadding">
+                            <a>@item1.TextRequest</a>
+                        </dd>
+                    }
+                    @if (item.ListResponses.Count() == 0)
+                    {
+                        <dt class="col-sm-5 stroka1" id="mypadding">
+                            <a>Ответ на заявку</a>
+                        </dt>
+                        <dd class="col-sm-7 stroka2" id="mypadding">
+                            <i class="annul">На заявку пока нет ответа</i>
+                        </dd>
+                    }
+                    else
+                    {
+                        @foreach (var item2 in item.ListResponses)
+                        {
+                            <dt class="col-sm-5 stroka1" id="mypadding">
+                                <a>Ответ на заявку</a>
+                            </dt>
+                            <dd class="col-sm-7 stroka2" id="mypadding">
+                                 <a>@item2.TextResponse</a>
+                            </dd>
+                        }
+                    }
+                }
+    </dl>
+        <form asp-action="RequestClose">
+                @foreach (var item2 in Model)
+                {
+                     @foreach (var item3 in item2.RequestAccept)
+                     {
+                        @if (item2.ListResponses.Count() == 0)
+                        {
+                            <div id="mypadding">
+                                <button type="submit" class="btn btn-danger" disabled> Исполнить</button>
+                                <a asp-controller="Responses" asp-action="Create" asp-route-id="@item3.RequestId"
+                                class="btn btn-secondary">Ответить</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="mypadding">
+                                <input type="hidden" asp-for="@item3.RequestId" />
+                                <button type="submit" class="btn btn-danger"> Исполнить</button>
+                            </div>
+                        }
+                     }
+                }
+        </form>
+</div>
+

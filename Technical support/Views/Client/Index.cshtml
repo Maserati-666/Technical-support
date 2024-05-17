@@ -1,0 +1,37 @@
+﻿@model IdentityUser
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Client Page";
+}
+<main class="main">
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Client"
+                   asp-action="Index">Главная</a>
+            </li>
+        </ol>
+    </nav>
+    <h1>Добро пожаловать на портал службы технической поддержки!</h1>
+    <div class="block1">
+        <div>
+            <p>Хотите оставить заявку в службу технической поддержки?</p>
+        </div>
+        <div class="btn-block1">
+            <a asp-controller="Requests" asp-action="Create" class="btn btn-light btn-lg">Создать заявку</a>
+        </div>
+    </div>
+    <div class="block1">
+        <div>
+            <p>Хотите посмотреть статус вашей заявки?</p>
+        </div>
+        <div class="btn-block1">
+            <a asp-controller="Requests" asp-action="MyRequests" asp-route-id="@UserManager.GetUserId(User)"
+            class="btn btn-light btn-lg">Посмотреть</a>
+        </div>
+    </div>
+    
+</main>
+
+

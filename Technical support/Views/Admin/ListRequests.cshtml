@@ -1,0 +1,169 @@
+﻿@using Technical_support.ViewModel;
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@model IEnumerable<RequestAdminList>
+@{
+    ViewData["Title"] = "Список заявок";
+}
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Список заявок</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Admin" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Заявки</li>
+            <li class="breadcrumb-item active">Список заявок</li>
+        </ol>
+    </nav>
+</div>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="ListRequests" method="post">
+    <div class="form-group" id="filter">
+        <div id="filter">
+            <label name="statusRequest">Выберите тип заявки:</label>
+        </div>
+        <div id="filter">
+            <select name="statusRequest" class="form-select" asp-items="ViewBag.StatusRequestId" onchange="this.form.submit()"></select>
+        </div>
+    </div>
+</form>
+
+<table id="example" class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameTheme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prioritet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TextRequest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOpen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ManagerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateClose)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameTheme)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prioritet)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TextRequest)
+                </td>
+                <td class="thwidth">
+                    @Html.DisplayFor(modelItem => item.DateOpen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ManagerName)
+                </td>
+                <td class="thwidth">
+                    @Html.DisplayFor(modelItem => item.DateClose)
+                </td>
+                @if (item.Status == "Исполнена")
+                {
+                    <td>
+                        <div class="ispoln">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </div>
+                    </td>
+                }
+                else if (item.Status == "Открыта")
+                {
+                    <td>
+                        <div class="otkr">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </div>
+                    </td>
+                }
+                else if (item.Status == "В работе")
+                {
+                    <td>
+                        <div class="vrab">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </div>
+                    </td>
+                }
+                else if (item.Status == "Аннулирована")
+                {
+                    <td>
+                        <div class="annul">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </div>
+                    </td>
+                }
+                <td class="thwidthbut">
+                    <a class="btn btn-primary btn-sm" asp-controller="Requests" asp-action="Edit" asp-route-user="@UserManager.GetUserId(User)"
+                    asp-route-id="@item.RequestId">Изменить</a>
+                    <a class="btn btn-info btn-sm" asp-controller="Requests" asp-action="Details" asp-route-id="@item.RequestId">Подробнее</a>
+                    <a class="btn btn-danger btn-sm" asp-controller="Requests" asp-action="Delete" asp-route-id="@item.RequestId">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameTheme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prioritet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TextRequest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOpen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ManagerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateClose)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Действие</th>
+        </tr>
+    </tfoot>
+</table>

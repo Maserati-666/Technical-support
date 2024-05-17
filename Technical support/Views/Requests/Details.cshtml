@@ -1,0 +1,230 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+@model Technical_support.ViewModel.RequestDetail
+
+@{
+    ViewData["Title"] = "Детали заявки";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Детали заявки</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="breadcrumb-item">
+                    <a asp-controller="Admin"
+                       asp-action="Index">Главная</a>
+                </li>
+            }
+            else
+            {
+                if (User.IsInRole("Manager"))
+                {
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Manager"
+                           asp-action="Index">Главная</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Client"
+                           asp-action="Index">Главная</a>
+                    </li>
+                }
+            }
+            <li class="breadcrumb-item">Заявки</li>
+            <li class="breadcrumb-item active">Детали заявки</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="cards2">
+    <dl class="row" id="mypadding">
+        <dt class="col-sm-4" id="mypadding">
+            <a>Номер заявки</a>
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.Request.RequestId)
+        </dd>
+        <dt class="col-sm-4" id="mypadding">
+            <a>Имя пользователя</a>
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.Request.User.UserName)
+        </dd>
+        <dt class="col-sm-4" id="mypadding">
+            <a>Тема заявки</a>
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.Request.Theme.DescriptionTheme)
+        </dd>
+        <dt class="col-sm-4" id="mypadding">
+            <a>Приоритет заявки</a>
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.Request.Prioritet.PrioritetRequest)
+        </dd>
+        <dt class="col-sm-4" id="mypadding">
+            @Html.DisplayNameFor(model => model.Request.TextRequest)
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.Request.TextRequest)
+        </dd>
+        <dt class="col-sm-4" id="mypadding">
+            @Html.DisplayNameFor(model => model.Request.File)
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @if (Model.Request.File != null)
+            {
+                <div id="image">
+                    @Html.Raw("<img style='width:500px;' src=\"data:image/jpeg;base64,"
+                + Convert.ToBase64String(Model.Request.File) + "\" />")
+                </div>
+                <div id="mypadding">
+                    <button class="btn btn-primary btn-" id="btnclick">Увеличить</button>
+                </div>
+                <div id="photo" class="modal">
+                    <div class="modal-dialog modal-sm"></div>
+                    <div class="modal-content"></div>
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if (Model.Request.File != null)
+                        {
+                            @Html.Raw("<img src=\"data:image/jpeg;base64,"
+                    + Convert.ToBase64String(Model.Request.File) + "\" />")
+                        }
+                        else
+                        {
+                            <a id="mypadding">-</a>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a id="mypadding">-</a>
+            }
+        </dd>
+        <dt class="col-sm-4" id="mypadding">
+            @Html.DisplayNameFor(model => model.Request.DateOpen)
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.Request.DateOpen)
+        </dd>
+        <dt class="col-sm-4" id="mypadding">
+            <a>Менеджер</a>
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.Request.Manager.UserName)
+        </dd>
+        <dt class="col-sm-4" id="mypadding">
+            @Html.DisplayNameFor(model => model.Request.DateClose)
+        </dt>
+        @if (Model.Request.DateClose == null)
+        {
+            <dd class="col-sm-8" id="mypadding">
+                <a id="mypadding">-</a>
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-8" id="mypadding">
+                @Html.DisplayFor(model => model.Request.DateClose)
+            </dd>
+        }
+        <dt class="col-sm-4" id="mypadding">
+            <a>Статус</a>
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.Request.StatusRequest.Status)
+        </dd>
+        @if (Model.ListResponses.Count() == 0)
+        {
+            <dt class="col-sm-5 stroka1" id="mypadding">
+                <a>Ответ на заявку</a>
+            </dt>
+            <dd class="col-sm-7 stroka2" id="mypadding">
+                <i class="annul">На заявку пока нет ответа</i>
+            </dd>
+        }
+        else
+        {
+            int count = 1;
+            @foreach (var item in Model.ListResponses)
+            {
+                <dt class="col-sm-4 stroka1" id="mypadding">
+                    <a id="mypadding2">Ответ № @count</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Responses" asp-action="Edit" asp-route-id="@item.ResponseId"
+                           class="btn btn-primary btn-sm" title="Изменить">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a asp-controller="Responses" asp-action="Delete" asp-route-id="@item.ResponseId"
+                           class="btn btn-danger btn-sm" title="Удалить">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    }
+                </dt>
+                <dd class="col-sm-8 stroka2" id="mypadding">
+                    @item.TextResponse
+                </dd>
+                count++;
+            }
+        }
+    </dl>
+    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+    {
+        <div id="mypadding">
+            @if (Model.Request.StatusRequestId == 2)
+            {
+                <a asp-controller="Responses" asp-action="Create" asp-route-id="@Model.Request.RequestId"
+                   class="btn btn-primary disabled">Ответить</a>
+            }
+            else
+            {
+                <a asp-controller="Responses" asp-action="Create" asp-route-id="@Model.Request.RequestId"
+                   class="btn btn-primary">Ответить</a>
+            }
+            <a asp-controller="Manager" asp-action="ListRequests" class="btn btn-secondary">Назад</a>
+        </div>
+    }
+    else
+    {
+        <div id="mypadding">
+            @if (Model.Request.StatusRequest.Status == "Открыта")
+            {
+                <a asp-controller="Requests" asp-action="Edit" asp-route-id="@Model.Request.RequestId"
+                   class="btn btn-primary">Изменить</a>
+            }
+            else
+            {
+                <a asp-controller="Requests" asp-action="Edit" asp-route-id="@Model.Request.RequestId"
+                   class="btn btn-primary disabled" role="button" aria-disabled="true">Изменить</a>
+            }
+            <a asp-action="MyRequests" asp-route-id="@UserManager.GetUserId(User)"
+               class="btn btn-secondary">Назад</a>
+        </div>
+    }
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnclick").click(function () {
+            $("#photo").modal('show');
+        });
+
+        $("HidebtnModal").click(function () {
+            $("#photo").modal('hide');
+        });
+    });
+</script>

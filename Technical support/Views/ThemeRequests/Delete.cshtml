@@ -1,0 +1,49 @@
+﻿@model Technical_support.Models.ThemeRequest
+
+@{
+    ViewData["Title"] = "Удаление темы заявки";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Удаление темы заявки</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Admin" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Темы заявок</li>
+            <li class="breadcrumb-item active">Удалить</li>
+        </ol>
+    </nav>
+</div>
+
+
+
+<div class="header-h1">
+    <h3>Удалить тему заявки?</h3>
+</div>
+
+<div class="cards">
+    <div class="row">
+        <div class="col-md-10">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <form asp-action="Delete" method="post">
+                <div class="form-group" id="mypadding">
+                    <label asp-for="NameTheme"> Название темы заявки</label>
+                    <input asp-for="NameTheme" class="form-control" value="@Model.NameTheme" readonly />
+                </div>
+                <div class="form-group" id="mypadding">
+                    <label asp-for="DescriptionTheme">Описание темы</label>
+                    <textarea asp-for="DescriptionTheme" class="form-control" value="@Model.DescriptionTheme" readonly></textarea>
+                </div>
+                <div id="mypadding">
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                    <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

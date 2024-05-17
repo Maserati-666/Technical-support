@@ -1,0 +1,104 @@
+﻿@model Technical_support.ViewModel.RequestImage
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+
+@{
+    ViewData["Title"] = "Создать заявку";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Создать заявку</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="breadcrumb-item">
+                    <a asp-controller="Admin"
+                       asp-action="Index">Главная</a>
+                </li>
+            }
+            else
+            {
+                if (User.IsInRole("Manager"))
+                {
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Manager"
+                           asp-action="Index">Главная</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Client"
+                           asp-action="Index">Главная</a>
+                    </li>
+                }
+            }
+            <li class="breadcrumb-item">Заявки</li>
+            <li class="breadcrumb-item active">Создать заявку</li>
+        </ol>
+    </nav>
+</div>
+<div class="cards">
+    <div class="row">
+        <div class="col-md-10">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group" id="mypadding" hidden>
+                    <label asp-for="UserId" class="control-label"></label>
+                    <input asp-for="UserId" class="form-control" value="@UserManager.GetUserId(User)" />
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+                <div class="form-group" id="mypadding">
+                    <label asp-for="ThemeId" class="control-label">Тема заявки</label>
+                    <select asp-for="ThemeId" class="form-select" asp-items="ViewBag.ThemeId"></select>
+                </div>
+                <div class="form-group" id="mypadding">
+                    <label asp-for="PrioritetId" class="control-label">Приоритет</label>
+                    <select asp-for="PrioritetId" class="form-select" asp-items="ViewBag.PrioritetId"></select>
+                </div>
+                <div class="form-group" id="mypadding">
+                    <label asp-for="TextRequest" class="control-label"></label>
+                    <textarea asp-for="TextRequest" class="form-control" id="biginput"></textarea>
+                    <span asp-validation-for="TextRequest" class="text-danger"></span>
+                </div>
+                <div class="form-group" id="mypadding">
+                    <label asp-for="image" class="control-label"></label>
+                    <input asp-for="image" class="form-control" />
+                    <span asp-validation-for="image" class="text-danger"></span>
+                </div>
+                <div class="form-group" id="mypadding" hidden>
+                    <label asp-for="DateOpen" class="control-label"></label>
+                    <input asp-for="DateOpen" class="form-control" />
+                    <span asp-validation-for="DateOpen" class="text-danger"></span>
+                </div>
+                <div class="form-group" id="mypadding" hidden>
+                    <label asp-for="ManagerId" class="control-label"></label>
+                    <input asp-for="ManagerId" class="form-control" />
+                    <span asp-validation-for="ManagerId" class="text-danger"></span>
+                </div>
+                <div class="form-group" id="mypadding" hidden>
+                    <label asp-for="DateClose" class="control-label"></label>
+                    <input asp-for="DateClose" class="form-control" />
+                    <span asp-validation-for="DateClose" class="text-danger"></span>
+                </div>
+                <div class="form-group" id="mypadding" hidden>
+                    <label asp-for="StatusRequestId" class="control-label"></label>
+                    <select asp-for="StatusRequestId" class="form-control" asp-items="ViewBag.StatusRequestId"></select>
+                </div>
+                <div class="form-group" id="mypadding">
+                    <input type="submit" value="Создать" class="btn btn-primary" />
+                    <a asp-controller="Requests" asp-action="MyRequests" asp-route-id="@UserManager.GetUserId(User)"
+                    class="btn btn-secondary">Назад</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

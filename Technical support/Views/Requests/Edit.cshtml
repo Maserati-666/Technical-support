@@ -1,0 +1,165 @@
+﻿@model Technical_support.Models.Request
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "Изменение заявки";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Изменение заявки</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="breadcrumb-item">
+                    <a asp-controller="Admin"
+                       asp-action="Index">Главная</a>
+                </li>
+            }
+            else
+            {
+                if (User.IsInRole("Manager"))
+                {
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Manager"
+                           asp-action="Index">Главная</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Client"
+                           asp-action="Index">Главная</a>
+                    </li>
+                }
+            }
+            <li class="breadcrumb-item">Заявки</li>
+            <li class="breadcrumb-item active">Изменение заявки</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="cards">
+    <div class="row">
+        <div class="col-md-10">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="RequestId" />
+                <input type="hidden" name="user" value="@UserManager.GetUserId(User)" />
+                <div class="form-group" hidden id="mypadding">
+                    <label asp-for="UserId" class="control-label"></label>
+                    <input asp-for="UserId" class="form-control" />
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+                @if (User.IsInRole("Manager") && Model.UserId != UserManager.GetUserId(User))
+                {
+                    <div class="form-group" id="mypadding">
+                        <label asp-for="ThemeId" class="control-label"></label>
+                        <select asp-for="ThemeId" class="form-control" asp-items="ViewBag.ThemeId"></select>
+                        <span asp-validation-for="ThemeId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" id="mypadding">
+                        <label asp-for="PrioritetId" class="control-label"></label>
+                        <select asp-for="PrioritetId" class="form-control" style="pointer-events: none;" asp-items="ViewBag.PrioritetId"></select>
+                        <span asp-validation-for="PrioritetId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" id="mypadding">
+                        <label asp-for="TextRequest" class="control-label"></label>
+                        <textarea asp-for="TextRequest" class="form-control" id="biginput" readonly></textarea>
+                        <span asp-validation-for="TextRequest" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" id="mypadding">
+                        <label asp-for="Image" class="control-label">Файл</label>
+                        <input asp-for="Image" class="form-control" disabled />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                }
+
+                else
+                {
+                    <div class="form-group" id="mypadding">
+                        <label asp-for="ThemeId" class="control-label"></label>
+                        <select asp-for="ThemeId" class="form-control" asp-items="ViewBag.ThemeId"></select>
+                        <span asp-validation-for="ThemeId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" id="mypadding">
+                        <label asp-for="PrioritetId" class="control-label"></label>
+                        <select asp-for="PrioritetId" class="form-control" asp-items="ViewBag.PrioritetId"></select>
+                        <span asp-validation-for="PrioritetId" class="text-danger"></span>
+                    </div>
+                    @if (User.IsInRole("Admin") && Model.UserId != UserManager.GetUserId(User))
+                    {
+                        <div class="form-group" id="mypadding">
+                            <label asp-for="TextRequest" class="control-label"></label>
+                            <textarea asp-for="TextRequest" class="form-control" id="biginput" readonly></textarea>
+                            <span asp-validation-for="TextRequest" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" id="mypadding">
+                            <label asp-for="Image" class="control-label">Файл</label>
+                            <input asp-for="Image" class="form-control" disabled/>
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group" id="mypadding">
+                            <label asp-for="TextRequest" class="control-label"></label>
+                            <textarea asp-for="TextRequest" class="form-control" id="biginput"></textarea>
+                            <span asp-validation-for="TextRequest" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" id="mypadding">
+                            <label asp-for="Image" class="control-label">Файл</label>
+                            <input asp-for="Image" class="form-control" />
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+                    }
+                    
+                    <div class="form-group" hidden>
+                        <label asp-for="DateOpen" class="control-label"></label>
+                        <input asp-for="DateOpen" class="form-control" />
+                        <span asp-validation-for="DateOpen" class="text-danger"></span>
+                    </div>
+                }
+                
+                <div class="form-group" hidden>
+                    <label asp-for="DateOpen" class="control-label"></label>
+                    <input asp-for="DateOpen" class="form-control" />
+                    <span asp-validation-for="DateOpen" class="text-danger"></span>
+                </div>
+                @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                {
+                    <div class="form-group" id="mypadding">
+                        <label asp-for="ManagerId" class="control-label">Менеджер</label>
+                        <select asp-for="ManagerId" class="form-control" asp-items="ViewBag.ManagerId"></select>
+                        <span asp-validation-for="ManagerId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" id="mypadding">
+                        <label asp-for="DateClose" class="control-label"></label>
+                        <input asp-for="DateClose" class="form-control" />
+                        <span asp-validation-for="DateClose" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" id="mypadding">
+                        <label asp-for="StatusRequestId" class="control-label"></label>
+                        <select asp-for="StatusRequestId" class="form-control" asp-items="ViewBag.StatusRequestId"></select>
+                        <span asp-validation-for="StatusRequestId" class="text-danger"></span>
+                    </div>
+                }
+
+                    <div class="form-group" hidden>
+                        <label asp-for="StatusRequestId" class="control-label"></label>
+                        <select asp-for="StatusRequestId" class="form-control" asp-items="ViewBag.StatusRequestId"></select>
+                        <span asp-validation-for="StatusRequestId" class="text-danger"></span>
+                    </div>
+                
+                <div class="form-group" id="mypadding">
+                    <input type="submit" value="Сохранить изменения" class="btn btn-primary" />
+                    <a asp-action="MyRequests" asp-route-id="@UserManager.GetUserId(User)" class="btn btn-secondary">Назад</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

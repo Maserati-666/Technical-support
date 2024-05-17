@@ -1,0 +1,36 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Создать роль";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Создать роль</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Admin" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Роли</li>
+            <li class="breadcrumb-item active">Создать роль</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="cards">
+    <div class="row">
+        <div class="col-md-10">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <form asp-action="CreateRole" method="post">
+                <div class="form-group" id="mypadding">
+                    <label for="name">Имя:</label>
+                    <input name="name" class="form-control" />
+                </div>
+                <div id="mypadding">
+                    <button type="submit" class="btn btn-primary">Создать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

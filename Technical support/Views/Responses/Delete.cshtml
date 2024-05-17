@@ -1,0 +1,52 @@
+﻿@model Technical_support.Models.Response
+
+@{
+    ViewData["Title"] = "Удаление ответа на заявку";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Удаление ответа на заявку</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Admin" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Ответ на заявку</li>
+            <li class="breadcrumb-item active">Удаление ответа на заявку</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="cards">
+    <dl class="row" id="mypadding">
+        <dt class="col-sm-4" id="mypadding">
+            <a>Номер заявки</a>
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.Request.RequestId)
+        </dd>
+        <dt class="col-sm-4" id="mypadding">
+            <a>Текст заявки</a>
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.Request.TextRequest)
+        </dd>
+        <dt class="col-sm-4" id="mypadding">
+            @Html.DisplayNameFor(model => model.TextResponse)
+        </dt>
+        <dd class="col-sm-8" id="mypadding">
+            @Html.DisplayFor(model => model.TextResponse)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div id="mypadding">
+            <input type="hidden" asp-for="ResponseId" />
+            <button type="submit" value="Delete" class="btn btn-danger">Удалить</button>
+            <a asp-controller="Requests" asp-action="Details" asp-route-id="@Model.Request.RequestId"
+            class="btn btn-secondary">Назад</a>
+        </div>
+    </form>
+</div>

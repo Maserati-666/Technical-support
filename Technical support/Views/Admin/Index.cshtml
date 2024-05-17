@@ -1,0 +1,101 @@
+﻿@model Technical_support.ViewModel.DataAdminIndex
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Главная";
+}
+<main class="main">
+    <h1 style="text-align: center;">Добро пожаловать на портал службы технической поддержки!</h1>
+    <br />
+</main>
+
+<div class="fixik">
+    <!-- Doughnut Chart -->
+    <div class="thbut" style="width:500px; height:500px;">
+        <h5 class="card-titles">Количество заявок по типам</h5>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form asp-action="Index" method="post" class="fixik">
+            <div class="form-group" id="filter">
+                <div id="filter">
+                    <label name="period">Выберите период:</label>
+                </div>
+                <div id="filter">
+                    <select name="period" class="form-select" asp-items="ViewBag.Period" onchange="this.form.submit()"></select>
+                </div>
+            </div>
+        </form>
+
+        @{
+            int proverka = Model.ListVidRequest.RequestOpen + Model.ListVidRequest.RequestClose + Model.ListVidRequest.RequestProg
+            + Model.ListVidRequest.RequestAnnul;
+        }
+        @if (proverka == 0)
+        {
+            <h5 class="fixik" style="padding-top:200px; color:red">На данный период заявок нет!</h5>
+        }
+        else
+        {
+            <canvas id="Количествозаявок" style="max-height: 390px;"></canvas>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                new Chart(document.querySelector('#Количествозаявок'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: [
+                            'Открытые',
+                            'В работе',
+                            'Исполненные',
+                            'Аннулированные'
+                        ],
+                        datasets: [{
+                            label: 'Количество заявок',
+                            data: [@Model.ListVidRequest.RequestOpen, @Model.ListVidRequest.RequestProg, @Model.ListVidRequest.RequestClose,
+            @Model.ListVidRequest.RequestAnnul],
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgb(34, 214, 73)',
+                                'rgb(255, 205, 86)'
+                            ],
+                            hoverOffset: 4
+                        }]
+                    }
+                });
+            });
+        </script>
+    <!-- End Doughnut CHart -->
+        }
+    </div>
+        
+    <!-- Doughnut Chart -->
+    <div class="thbut" style="width:500px; height:500px;">
+        <h5 class="card-titles">Количество пользователей по ролям</h5>
+        <div style="height:66px;"></div>
+        <canvas id="Количество_пользователей" style="max-height: 390px;"></canvas>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                new Chart(document.querySelector('#Количество_пользователей'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: [
+                            'Клиенты',
+                            'Менеджеры',
+                            'Администраторы'],
+                        datasets: [{
+                            label: 'Количество пользователей',
+                            data: [@Model.ListTypeUser.Client, @Model.ListTypeUser.Manager, @Model.ListTypeUser.Admin],
+                            backgroundColor: [
+                                'rgb(54, 162, 235)',
+                                'rgb(34, 214, 73)',
+                                'rgb(255, 205, 86)'
+                            ],
+                            hoverOffset: 4
+                        }]
+                    }
+                });
+            });
+        </script>
+        <!-- End Doughnut CHart -->
+    </div>
+</div>
+

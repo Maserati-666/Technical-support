@@ -1,0 +1,211 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Technical_support</title>
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css"/>
+    <link rel="stylesheet" href="~/css/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/Technical_support.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/datatables.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="header fixed-top">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-white box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Техническая поддержка</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="d-flex align-items-center justify-content-between">
+                    <a href="#" class="logo d-flex align-items-center">
+                        <img src="/img/logo.jpg" alt="">
+                    </a>
+                  @*   <i class="bi bi-list toggle-sidebar-btn"></i> *@
+                </div>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <ul class="navbar-nav flex-grow-1">
+                       @*  <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">User</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="Index">Role</a>
+                        </li> *@
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Client"))
+    {
+        <!-- ======= Sidebar ======= -->
+        <aside id="sidebar" class="sidebar">
+
+            <ul class="sidebar-nav" id="sidebar-nav">
+                <!-- Личный кабинет -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-person"></i><span>Личный кабинет</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a asp-controller="Client"
+                               asp-action="Profile" asp-route-id="@UserManager.GetUserId(User)">
+                                <i class="bi bi-diamond-fill"></i><span>Информация</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- конец Личный кабинет -->
+                <!-- Заявки -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-journal-text"></i><span>Заявки</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <li>
+                                <a asp-controller="Manager"
+                                   asp-action="ListRequests">
+                                    <i class="bi bi-diamond-fill"></i><span>Открытые заявки</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Manager"
+                                   asp-action="CloseRequests" asp-route-id="@UserManager.GetUserId(User)">
+                                    <i class="bi bi-diamond-fill"></i><span>Выполненные заявки</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Manager"
+                                   asp-action="RequestsInProgress" asp-route-id="@UserManager.GetUserId(User)">
+                                    <i class="bi bi-diamond-fill"></i><span>Заявки в работе</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li>
+                                <a asp-controller="Admin"
+                                   asp-action="ListRequests">
+                                    <i class="bi bi-diamond-fill"></i><span>Cписок заявок</span>
+                                </a>
+                            </li>
+                        }
+                            <li>
+                                <a asp-controller="Requests"
+                                   asp-action="Create">
+                                    <i class="bi bi-diamond-fill"></i><span>Создать заявку</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Requests"
+                                   asp-action="MyRequests" asp-route-id="@UserManager.GetUserId(User)">
+                                    <i class="bi bi-diamond-fill"></i><span>Мои заявки</span>
+                                </a>
+                            </li>
+                    </ul>
+                </li><!-- Конец Заявки -->
+                <!-- Пользователи -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
+                            <i class="bi bi-person-fill-check"></i><span>Пользователи</span><i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <ul id="user-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                            <li>
+                                <a asp-controller="Admin"
+                                   asp-action="CreateUser">
+                                    <i class="bi bi-diamond-fill"></i><span>Создать пользователя</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Admin"
+                                   asp-action="Accounts">
+                                    <i class="bi bi-diamond-fill"></i><span>Учетные записи</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li><!-- Конец Пользователи -->
+                    <!-- Роли -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-bs-target="#role-nav" data-bs-toggle="collapse" href="#">
+                            <i class="bi bi-clipboard2-pulse"></i><span>Роли</span><i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <ul id="role-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                            <li>
+                                <a asp-controller="Admin"
+                                   asp-action="CreateRole">
+                                    <i class="bi bi-diamond-fill"></i><span>Создать роль</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Admin"
+                                   asp-action="AccountsRoles">
+                                    <i class="bi bi-diamond-fill"></i><span>Управление ролями</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li><!-- Конец роли -->
+                    <!-- Темы заявок -->
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" data-bs-target="#theme-nav" data-bs-toggle="collapse" href="#">
+                            <i class="bi bi-card-list"></i><span>Темы заявок</span><i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <ul id="theme-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                            <li>
+                                <a asp-controller="ThemeRequests"
+                                   asp-action="Create">
+                                    <i class="bi bi-diamond-fill"></i><span>Создать тему</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="ThemeRequests"
+                                   asp-action="Index">
+                                    <i class="bi bi-diamond-fill"></i><span>Управление темами</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Конец Темы заявок -->
+                }
+            </ul>
+
+        </aside>
+
+        <!-- End Sidebar-->
+    }
+    <div class="container">
+        <main role="main" id="main" class="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        @* <div class="container">
+            &copy; 2024 - Technical_support - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div> *@
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/dataTables.bootstrap5.js"></script>
+    <script src="~/js/dataTables.js"></script>
+    <script src="~/js/chart.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

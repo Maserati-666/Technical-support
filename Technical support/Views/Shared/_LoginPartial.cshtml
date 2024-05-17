@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item dropdown pe-3">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                @if (ViewContext.HttpContext.User.IsInRole("Client"))
+                {
+                    <img src="/img/user.jpg" alt="Profile" style="height: 45px;" class="rounded-circle">
+                }
+                else
+                {
+                    if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                    {
+                        <img src="/img/admin.jpg" alt="Profile" style="height: 45px;" class="rounded-circle">
+                    }
+                    else
+                    {
+                        <img src="/img/support.jpg" alt="Profile" style="height: 45px;" class="rounded-circle">
+                    }
+                }
+              <span id="nav-profile" class="d-none d-md-block dropdown-toggle ps-2">@User.Identity?.Name</span>
+          </a><!-- End Profile Iamge Icon -->
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                <li class="dropdown-header">
+                    <h6>@User.Identity?.Name</h6>
+                    @if (ViewContext.HttpContext.User.IsInRole("Client"))
+                    {
+                        <span>Client</span>
+                    }
+                    else
+                    {
+                        if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                        {
+                            <span>Admin</span>
+                        }
+                        else
+                        {
+                            <span>Manager</span>
+                        }
+                    }
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+                    <a asp-controller="Client" asp-action="Profile" asp-route-id="@UserManager.GetUserId(User)"
+                        class="dropdown-item d-flex align-items-center">
+                        <i class="bi bi-person"></i>
+                        <span>Профиль</span>
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+        
+                <li>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="dropdown-item d-flex align-items-center">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Выйти</span>
+                        </button>
+                    </form>
+                </li>
+            </ul><!-- End Profile Dropdown Items -->
+        </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-black-50" asp-area="Identity" asp-page="/Account/Register">Регистрация</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Войти</a>
+    </li>
+}
+</ul>

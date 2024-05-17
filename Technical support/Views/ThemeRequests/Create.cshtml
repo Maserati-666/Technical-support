@@ -1,0 +1,46 @@
+﻿@model Technical_support.Models.ThemeRequest
+
+@{
+    ViewData["Title"] = "Создать тему заявки";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Создание темы заявки</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Admin" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Темы заявок</li>
+            <li class="breadcrumb-item active">Создать тему заявки</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="cards">
+    <div class="row">
+        <div class="col-md-10">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="NameTheme" class="control-label"></label>
+                    <input asp-for="NameTheme" class="form-control" />
+                    <span asp-validation-for="NameTheme" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DescriptionTheme" class="control-label"></label>
+                    <textarea asp-for="DescriptionTheme" class="form-control" id="biginput"></textarea>
+                    <span asp-validation-for="DescriptionTheme" class="text-danger"></span>
+                </div>
+                <div id="mypadding">
+                    <button type="submit" class="btn btn-primary">Создать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+

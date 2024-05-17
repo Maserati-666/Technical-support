@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Technical_support.ViewModel.ListRequest>
+@{
+    ViewData["Title"] = "Выполненные заявки";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Выполненные заявки</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Manager" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Заявки</li>
+            <li class="breadcrumb-item active">Выполненные заявки</li>
+        </ol>
+    </nav>
+</div>
+
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RequestId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NameTheme)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Prioritet)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TextRequest)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.File)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateOpen)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameTheme)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prioritet)
+                </td>
+                <td class="maxwidth">
+                    @Html.DisplayFor(modelItem => item.TextRequest)
+                </td>
+                <td>
+                    @if (item.File != null)
+                    {
+                        @Html.Raw("<img style='height:80px;' src=\"data:image/jpeg;base64,"
+                + Convert.ToBase64String(item.File) + "\" />")
+                    }
+                    else
+                    {
+                        <a>-</a>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOpen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <a asp-controller="Requests" asp-action="Details" class="btn btn-sm btn-info" asp-route-id="@item.RequestId">Подробнее</a>
+                </td>
+            </tr>
+        }
+        <tfoot>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RequestId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NameTheme)
+                </th>
+                 <th>
+                    @Html.DisplayNameFor(model => model.Prioritet)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TextRequest)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.File)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateOpen)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>

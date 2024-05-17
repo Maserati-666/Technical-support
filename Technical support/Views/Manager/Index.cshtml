@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Technical_support.Models.Request>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Главная страница";
+    int count = 0;
+}
+
+<main class="main">
+
+    <h1>Добро пожаловать на портал службы технической поддержки!</h1>
+
+    <div class="block1">
+            @foreach (var item in Model)
+            {
+                if (item.StatusRequestId == 1)
+                {
+                    count++;
+                }
+            }
+                @if (count == 0)
+                {
+                    <div>
+                        <p>Пока нет новых заявок в тех. поддержку: </p>
+                    </div>
+                    <div class="btn-block1">
+                        <a asp-controller="Manager" asp-action="ListRequests" class="btn btn-light btn-lg disabled" role="button" aria-disabled="true">Начать работу</a>
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        <p>Количество новых заявок в тех. поддержку: @count</p>
+                    </div>
+                    <div class="btn-block1">
+                        <a asp-controller="Manager" asp-action="ListRequests" class="btn btn-light btn-lg">Начать работу</a>
+                    </div>
+                }
+    </div>
+
+    <div class="block1">
+        @{
+            count = 0;
+        }
+            @foreach (var item in Model)
+            {
+                if (item.StatusRequestId == 2 && item.ManagerId == UserManager.GetUserId(User))
+                {
+                    count++;
+                }
+            }
+            @if (count == 0)
+            {
+                    <div>
+                        <p>Количество заявок в работе: @count</p>
+                    </div>
+                    <div class="btn-block1">
+                        <a asp-controller="Manager" asp-action="RequestsInProgress" class="btn btn-light btn-lg disabled" role="button" aria-disabled="true">Начать работу</a>
+                    </div>
+            }
+            else
+            {
+                    <div>
+                        <p>Количество заявок в работе: @count</p>
+                    </div>
+                    <div class="btn-block1">
+                        <a asp-controller="Manager" asp-action="RequestsInProgress" asp-route-id="@UserManager.GetUserId(User)" 
+                        class="btn btn-light btn-lg">Посмотреть</a>
+                    </div>
+            }
+    </div>
+
+
+
+
+    <div class="block1">
+        <div>
+            <p>Хотите посмотреть статус вашей заявки?</p>
+        </div>
+        <div class="btn-block1">
+            <a asp-controller="Requests" asp-action="MyRequests" asp-route-id="@UserManager.GetUserId(User)"
+               class="btn btn-light btn-lg">Посмотреть</a>
+        </div>
+    </div>
+
+</main>
+

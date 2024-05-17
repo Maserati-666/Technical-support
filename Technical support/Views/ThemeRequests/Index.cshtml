@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Technical_support.Models.ThemeRequest>
+
+@{
+    ViewData["Title"] = "Управление темами заявки";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Управление темами</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Admin" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Темы заявок</li>
+            <li class="breadcrumb-item active">Управление темами</li>
+        </ol>
+    </nav>
+</div>
+
+
+<div style="width: 60%">
+    <table id="example" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.NameTheme)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DescriptionTheme)
+                </th>
+                <th style="width: 25%">Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NameTheme)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DescriptionTheme)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ThemeId" class="btn btn-primary btn-sm">Изменить</a>
+                        <a asp-action="Delete" asp-route-id="@item.ThemeId" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.NameTheme)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DescriptionTheme)
+                </th>
+                <th></th>
+            </tr>
+        </tfoot>
+        <tbody>
+    </table>
+</div>
+

@@ -1,0 +1,135 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@model IEnumerable<Technical_support.ViewModel.ListRequest>
+@{
+    ViewData["Title"] = "Заявки в работе";
+}
+
+<div class="pagetitle">
+    <div class="header-h1">
+        <h1>Заявки в работе</h1>
+    </div>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-controller="Manager" asp-action="Index">Главная</a>
+            </li>
+            <li class="breadcrumb-item">Заявки</li>
+            <li class="breadcrumb-item active">Заявки в работе</li>
+        </ol>
+    </nav>
+</div>
+
+<table id="example" class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameTheme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prioritet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TextRequest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.File)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOpen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NameTheme)
+                    <div>
+                        <a asp-controller="Requests" asp-action="Edit" asp-route-user="@UserManager.GetUserId(User)"
+                           asp-route-id="@item.RequestId" class="btn btn-primary btn-sm" title="Изменить">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prioritet)
+                </td>
+                <td class="maxwidth">
+                    @Html.DisplayFor(modelItem => item.TextRequest)
+                </td>
+                <td>
+                    @if (item.File != null)
+                    {
+                        @Html.Raw("<img style='height:80px;' src=\"data:image/jpeg;base64,"
+                + Convert.ToBase64String(item.File) + "\" />")
+                    }
+                    else
+                    {
+                        <a>-</a>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOpen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td class="maxwidth3">
+                    <a asp-controller="Responses" asp-action="Create" asp-route-id="@item.RequestId"
+                       class="btn btn-primary btn-sm">Ответить</a>
+                    <a asp-controller="Requests" asp-action="Details" asp-route-id="@item.RequestId"
+                       class="btn btn-success btn-sm">Подробнее</a>
+                    <a asp-controller="Manager" asp-action="RequestClose" asp-route-id="@item.RequestId"
+                       class="btn btn-danger btn-sm">Исполнить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameTheme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prioritet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TextRequest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.File)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOpen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>Действие</th>
+        </tr>
+    </tfoot>
+</table>
